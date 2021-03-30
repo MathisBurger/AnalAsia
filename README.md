@@ -15,11 +15,10 @@
 
 <div align="center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Go_Logo_Blue.svg/1200px-Go_Logo_Blue.svg.png" height="100">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png" height="100">
 </div>
 
 # Information
 
 ---
 AnalAsia is a discord bot made for analysing discord server chats and display them<br>
-in a beautiful webpanel. Of course there is also a solution via commands.
+Of course there is also a solution via commands.
