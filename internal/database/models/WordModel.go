@@ -17,3 +17,15 @@ func (c WordModel) Parse(resp *sql.Rows) WordModel {
 	_ = resp.Scan(&mdl.ID, &mdl.Word, &mdl.Counter)
 	return mdl
 }
+
+// This function parses all words in the table `words`
+// of the type WordModel
+func (c WordModel) ParseAll(resp *sql.Rows) []WordModel {
+	var answers []WordModel
+	for resp.Next() {
+		var mdl WordModel
+		_ = resp.Scan(&mdl.ID, &mdl.Word, &mdl.Counter)
+		answers = append(answers, mdl)
+	}
+	return answers
+}

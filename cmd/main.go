@@ -35,6 +35,7 @@ func main() {
 
 	// register commands
 	handler.Register("info", "Information command", commands.InfoCommand, 100)
+	handler.Register("top", "Returns the top 10 words of guild", commands.TopCommand, 100)
 
 	// add command handler and word collector
 	session.AddHandler(handler.Execute)

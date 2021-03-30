@@ -28,6 +28,8 @@ func CreateWord(word string) {
 	stmt.Exec(word)
 }
 
+// this function increases the counter
+// of existing word
 func IncreaseWord(word string) {
 	conn := database.Connect()
 	defer conn.Close()
