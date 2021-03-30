@@ -20,5 +20,5 @@
 # Information
 
 ---
-AnalAsia is a discord bot made for analysing discord server chats and display them<br>
+AnalAsia is a discord bot made for analysing discord server chats and display them.<br>
 Of course there is also a solution via commands.

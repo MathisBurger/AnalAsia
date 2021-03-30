@@ -1,4 +1,4 @@
-package collector
+package words
 
 import (
 	"github.com/MathisBurger/AnalAsia/internal/database"

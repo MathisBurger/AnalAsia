@@ -1,6 +1,8 @@
 package collector
 
 import (
+	"github.com/MathisBurger/AnalAsia/internal/collector/user-words"
+	"github.com/MathisBurger/AnalAsia/internal/collector/words"
 	"github.com/MathisBurger/AnalAsia/pkg/algorithms"
 	"github.com/bwmarrin/discordgo"
 	"os"
@@ -27,11 +29,24 @@ func Collector(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		for _, raw := range modifiedParts {
 			word := algorithms.RemovePunicationMarks(strings.ToLower(raw))
-			if CheckExistance(word, m.GuildID) {
-				IncreaseWord(word, m.GuildID)
-			} else {
-				CreateWord(word, m.GuildID)
-			}
+			handleUserWords(word, m)
+			handleGuildWords(word, m)
 		}
+	}
+}
+
+func handleUserWords(word string, m *discordgo.MessageCreate) {
+	if user_words.CheckExistance(word, m.GuildID, m.Author.ID) {
+		user_words.IncreaseWord(word, m.Author.ID, m.GuildID)
+	} else {
+		user_words.CreateWord(word, m.Author.ID, m.GuildID)
+	}
+}
+
+func handleGuildWords(word string, m *discordgo.MessageCreate) {
+	if words.CheckExistance(word, m.GuildID) {
+		words.IncreaseWord(word, m.GuildID)
+	} else {
+		words.CreateWord(word, m.GuildID)
 	}
 }
