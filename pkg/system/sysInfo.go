@@ -7,6 +7,8 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
+// SystemInfo struct contains all
+// information about the system
 type SysInfo struct {
 	Hostname  string `bson:hostname`
 	Platform  string `bson:platform`
@@ -18,6 +20,9 @@ type SysInfo struct {
 	Disk      uint64 `bson:disk`
 }
 
+// This function returns all information
+// about the system and parses them into
+// the SysInfo struct
 func GetSystemInformation() *SysInfo {
 	hostStat, _ := host.Info()
 	cpuStat, _ := cpu.Info()
