@@ -24,11 +24,26 @@ type SysInfo struct {
 // about the system and parses them into
 // the SysInfo struct
 func GetSystemInformation() *SysInfo {
-	hostStat, _ := host.Info()
-	cpuStat, _ := cpu.Info()
-	vmStat, _ := mem.VirtualMemory()
-	swap, _ := mem.SwapMemory()
-	diskStat, _ := disk.Usage("\\") // If you're in Unix change this "\\" for "/"
+	hostStat, err := host.Info()
+	if err != nil {
+		panic(err.Error())
+	}
+	cpuStat, err := cpu.Info()
+	if err != nil {
+		panic(err.Error())
+	}
+	vmStat, err := mem.VirtualMemory()
+	if err != nil {
+		panic(err.Error())
+	}
+	swap, err := mem.SwapMemory()
+	if err != nil {
+		panic(err.Error())
+	}
+	diskStat, err := disk.Usage("/") // If you're in Unix change this "\\" for "/"
+	if err != nil {
+		panic(err.Error())
+	}
 	info := new(SysInfo)
 	info.Hostname = hostStat.Hostname
 	info.Platform = hostStat.Platform
