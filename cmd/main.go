@@ -31,7 +31,7 @@ func main() {
 	}
 
 	// Init command handler
-	handler := commander.New(os.Getenv("botPrefix"), "826378911444500501")
+	handler := commander.New(os.Getenv("botPrefix"), "")
 
 	// register commands
 	handler.Register("info", "Information command", commands.InfoCommand, 100)
