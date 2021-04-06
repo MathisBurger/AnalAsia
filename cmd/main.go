@@ -7,12 +7,23 @@ import (
 	"github.com/MathisBurger/AnalAsia/internal/database"
 	"github.com/MathisBurger/commander"
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
 func main() {
+
+	// Load environment variables from .env file
+	// if bot is in development mode
+	// This makes only sense for canary builds and tests
+	if os.Getenv("mode") == "dev" {
+		err := godotenv.Load()
+		if err != nil {
+			panic(err.Error())
+		}
+	}
 
 	// Initialize the database
 	database.InitDatabase()

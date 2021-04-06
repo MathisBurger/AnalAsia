@@ -17,7 +17,7 @@ func InfoCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	emb.SetTitle("Information")
 	emb.SetColor(colors.Blue)
 	emb.SetDescription("Information about the bot")
-	emb.AddField("Version:", "v0.0.1")
+	emb.AddField("Version:", "v0.0.2-dev")
 
 	sysInfo := system.GetSystemInformation()
 	emb.AddField("CPU:", sysInfo.CPU)
