@@ -61,6 +61,12 @@ func main() {
 		return
 	}
 
+	// sets the activity of the bot
+	err = session.UpdateListeningStatus("chat")
+	if err != nil {
+		panic(err.Error())
+	}
+
 	fmt.Println("The bot is running now. Terminate by using CTRL-C")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
