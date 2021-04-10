@@ -50,6 +50,7 @@ func buildTopEmbed(description string, TopWords []models.WordModel, s *discordgo
 	for pos, word := range TopWords {
 		emb.AddField(strconv.Itoa(pos+1)+":", "word: "+word.Word+"\ncounter: "+strconv.Itoa(word.Counter))
 	}
+
 	_, _ = s.ChannelMessageSendEmbed(m.ChannelID, emb.MessageEmbed)
 }
 
