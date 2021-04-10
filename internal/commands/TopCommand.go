@@ -22,16 +22,12 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// than the single command
 	if len(spl) == 1 {
 
+		// generates the leaderboard for the
+		// guild in general
 		description := "These are the top 10 Words used on this server"
 		words := algorithms.BubbleSortWordModels(database.GetAllWordsOfGuild(m.GuildID))
 		TopWords := getTopWords(words)
 		buildTopEmbed(description, TopWords, s, m, true)
-	} else if len(spl) == 2 && spl[1] == "static" {
-
-		description := "These are the top 10 Words used on this server"
-		words := algorithms.BubbleSortWordModels(database.GetAllWordsOfGuild(m.GuildID))
-		TopWords := getTopWords(words)
-		buildTopEmbed(description, TopWords, s, m, false)
 	} else {
 
 		// Generate and send the message embed for every user
@@ -55,7 +51,7 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 // This function generates a TopWords message embed
 // and sends it into the command channel
 // It also deletes the command message and the embed after
-// 10 seconds if deleteMessages is true
+// 3 minutes if deleteMessages is true
 func buildTopEmbed(description string,
 	TopWords []models.WordModel,
 	s *discordgo.Session,
@@ -72,8 +68,8 @@ func buildTopEmbed(description string,
 	sendEmbed, _ := s.ChannelMessageSendEmbed(m.ChannelID, emb.MessageEmbed)
 
 	if deleteMessages {
-		go microservices.DeleteMessageAfterTime(s, m.Message, 10)
-		go microservices.DeleteMessageAfterTime(s, sendEmbed, 10)
+		go microservices.DeleteMessageAfterTime(s, m.Message, 180)
+		go microservices.DeleteMessageAfterTime(s, sendEmbed, 180)
 	}
 }
 
