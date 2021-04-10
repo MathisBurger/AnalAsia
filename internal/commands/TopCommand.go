@@ -32,9 +32,12 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 			for _, usr := range m.Mentions {
 				description := fmt.Sprintf("These are the top 10 Words used by `%s` on this server", usr.Username)
 				words := algorithms.BubbleSortWordModels(database.GetWordsByUserAndGuildID(usr.ID, m.GuildID))
-				buildTopEmbed(description, words, s, m)
+				TopWords := getTopWords(words)
+				buildTopEmbed(description, TopWords, s, m)
 			}
 		} else {
+
+			// send error message
 			_, _ = s.ChannelMessageSend(m.ChannelID, "Invalid command action")
 			return
 		}
