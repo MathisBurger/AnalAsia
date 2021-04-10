@@ -34,6 +34,8 @@ func main() {
 	fmt.Println("Prefix:", os.Getenv("botPrefix"))
 	fmt.Println("-------------------------------------------------------------------------------------")
 
+	fmt.Println("Running MathisBurger/commander version: v0.0.5")
+
 	// Initialize bot session
 	session, err := discordgo.New("Bot " + os.Getenv("botToken"))
 	if err != nil {
