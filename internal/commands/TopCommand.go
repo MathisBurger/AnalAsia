@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/MathisBurger/AnalAsia/internal/database"
 	"github.com/MathisBurger/AnalAsia/internal/database/models"
+	"github.com/MathisBurger/AnalAsia/internal/microservices"
 	"github.com/MathisBurger/AnalAsia/pkg/algorithms"
 	"github.com/bwmarrin/discordgo"
 	embed "github.com/clinet/discordgo-embed"
@@ -20,10 +21,17 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// check if there are more parameters
 	// than the single command
 	if len(spl) == 1 {
+
 		description := "These are the top 10 Words used on this server"
 		words := algorithms.BubbleSortWordModels(database.GetAllWordsOfGuild(m.GuildID))
 		TopWords := getTopWords(words)
-		buildTopEmbed(description, TopWords, s, m)
+		buildTopEmbed(description, TopWords, s, m, true)
+	} else if len(spl) == 2 && spl[1] == "static" {
+
+		description := "These are the top 10 Words used on this server"
+		words := algorithms.BubbleSortWordModels(database.GetAllWordsOfGuild(m.GuildID))
+		TopWords := getTopWords(words)
+		buildTopEmbed(description, TopWords, s, m, false)
 	} else {
 
 		// Generate and send the message embed for every user
@@ -33,7 +41,7 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 				description := fmt.Sprintf("These are the top 10 Words used by `%s` on this server", usr.Username)
 				words := algorithms.BubbleSortWordModels(database.GetWordsByUserAndGuildID(usr.ID, m.GuildID))
 				TopWords := getTopWords(words)
-				buildTopEmbed(description, TopWords, s, m)
+				buildTopEmbed(description, TopWords, s, m, true)
 			}
 		} else {
 
@@ -46,7 +54,14 @@ func TopCommand(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // This function generates a TopWords message embed
 // and sends it into the command channel
-func buildTopEmbed(description string, TopWords []models.WordModel, s *discordgo.Session, m *discordgo.MessageCreate) {
+// It also deletes the command message and the embed after
+// 10 seconds if deleteMessages is true
+func buildTopEmbed(description string,
+	TopWords []models.WordModel,
+	s *discordgo.Session,
+	m *discordgo.MessageCreate,
+	deleteMessages bool) {
+
 	emb := embed.NewEmbed()
 	emb.SetTitle("Top Words")
 	emb.SetDescription(description)
@@ -54,7 +69,12 @@ func buildTopEmbed(description string, TopWords []models.WordModel, s *discordgo
 		emb.AddField(strconv.Itoa(pos+1)+":", "word: "+word.Word+"\ncounter: "+strconv.Itoa(word.Counter))
 	}
 
-	_, _ = s.ChannelMessageSendEmbed(m.ChannelID, emb.MessageEmbed)
+	sendEmbed, _ := s.ChannelMessageSendEmbed(m.ChannelID, emb.MessageEmbed)
+
+	if deleteMessages {
+		go microservices.DeleteMessageAfterTime(s, m.Message, 10)
+		go microservices.DeleteMessageAfterTime(s, sendEmbed, 10)
+	}
 }
 
 // This function gets the top words
